@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gravação de Áudio</title>
+</head>
+<body>
+    
+    <button id="startButton">Iniciar Gravação</button>
+    <button id="stopButton" disabled>Parar Gravação</button>
+    <audio id="audioPlayback" controls name="audio"></audio>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+
+        document.getElementById('startButton').onclick = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+           
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                document.getElementById('audioPlayback').src = audioUrl;
+                
+                // Enviar o áudio para o servidor
+                sendData(audioBlob);
+            };
+
+            mediaRecorder.start();
+            document.getElementById('startButton').disabled = true;
+            document.getElementById('stopButton').disabled = false;
+        };
+
+        document.getElementById('stopButton').onclick = () => {
+            mediaRecorder.stop();
+            document.getElementById('startButton').disabled = false;
+            document.getElementById('stopButton').disabled = true;
+        };
+
+        function sendData(audioBlob) {
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.wav');
+
+            fetch('/upload-audio', {
+                method: 'POST',
+                body: formData,
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Áudio enviado com sucesso!');
+                } else {
+                    console.error('Erro ao enviar o áudio.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+              });
+        }
+    </script>
+</body>
+</html>
