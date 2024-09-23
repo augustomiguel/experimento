@@ -15,9 +15,8 @@
 
         document.getElementById('startButton').onclick = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
-           
-
+            mediaRecorder = new MediaRecorder(stream);
+            
             mediaRecorder.ondataavailable = event => {
                 audioChunks.push(event.data);
             };
@@ -25,7 +24,6 @@
             mediaRecorder.onstop = () => {
                 const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                 const audioUrl = URL.createObjectURL(audioBlob);
-
                 document.getElementById('audioPlayback').src = audioUrl;
                 
                 // Enviar o áudio para o servidor
@@ -47,20 +45,16 @@
             const formData = new FormData();
             formData.append('audio', audioBlob, 'recording.wav');
 
-            fetch('/upload-audio', {
+            fetch('/upload', {
                 method: 'POST',
                 body: formData,
-            })
-            .then(response => {
+            }).then(response => {
                 if (response.ok) {
                     console.log('Áudio enviado com sucesso!');
                 } else {
                     console.error('Erro ao enviar o áudio.');
                 }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-              });
+            });
         }
     </script>
 </body>
