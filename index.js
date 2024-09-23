@@ -47,7 +47,7 @@ app.post('/upload',  
             const originalname = req.file.originalname;
             //const file = req.file;
             const filename = req.file.filename;
-            const filepath = path.join(audio, 'uploads', filename);
+            const filepath = path.join(__dirname, 'uploads', filename);
 
             // Aqui você pode salvar o arquivo em um banco de dados, processá-lo, etc.
             console.log(`Arquivo ${originalname} salvo como ${filepath}`);
