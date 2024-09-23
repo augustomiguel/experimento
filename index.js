@@ -1,19 +1,18 @@
 import express from "express";
 import bodyParser from "body-parser";
 
-//import multer from "multer";
+//// receber audio 
+import multer from 'multer';
+import path from "path";
+
 
 const app = express();
 const port = 3000;
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static("public"));
 
-// receber audio 
-const multer = require('multer');
-const path = require('path');
 const upload = multer({ dest: 'uploads/',
     fileFilter: (req, file, cb) => {
         if (file.mimetype === 'audio/wav' || file.mimetype === 'audio/mpeg') {
@@ -30,10 +29,10 @@ app.get("/", (req, res) => {
 });
 
 // * Post Routes
-app.post("/upload", (req, res) =>{
-    console.log(req.body);
-    res.redirect("/");
-});
+// app.post("/upload", (req, res) =>{
+//     console.log(req.body);
+//     res.redirect("/");
+// });
 
 
 app.listen(port, () =>{
@@ -41,18 +40,24 @@ app.listen(port, () =>{
  });
 
 
-// app.post('/upload-audio',   
-//     upload.single('audio'), async (req, res) => {
-//        const originalname = req.file.originalname;
-//        //const file = req.file;
-//        const filename = req.file.filename;
-//        const filepath = path.join(__dirname, 'uploads', filename);
-   
-//        // Aqui você pode salvar o arquivo em um banco de dados, processá-lo, etc.
-//        console.log(`Arquivo ${originalname} salvo como ${filepath}`);
-   
-//        res.json({ message: 'Arquivo enviado com sucesso' });
-//    });
+app.post('/upload-audio',   
+    upload.single('audio'), async (req, res) => {
+        
+        try{
+            const originalname = req.file.originalname;
+            //const file = req.file;
+            const filename = req.file.filename;
+            const filepath = path.join(__dirname, 'uploads', filename);
+
+            // Aqui você pode salvar o arquivo em um banco de dados, processá-lo, etc.
+            console.log(`Arquivo ${originalname} salvo como ${filepath}`);
+
+            res.json({ message: 'Arquivo enviado com sucesso' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Erro ao processar o arquivo' });
+          }
+   });
    
 
 

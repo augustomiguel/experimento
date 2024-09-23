@@ -50,7 +50,8 @@
             fetch('/upload-audio', {
                 method: 'POST',
                 body: formData,
-            }).then(response => {
+            })
+            .then(response => {
                 if (response.ok) {
                     console.log('Áudio enviado com sucesso!');
                 } else {
