@@ -1,6 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+//import multer from "multer";
+
 const app = express();
 const port = 3000;
 
@@ -10,24 +12,22 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static("public"));
 
 // receber audio 
-// const multer = require('multer');
-// const path = require('path');
-// const upload = multer({ dest: 'uploads/',
-//     fileFilter: (req, file, cb) => {
-//         if (file.mimetype === 'audio/wav' || file.mimetype === 'audio/mpeg') {
-//             cb(null, true);
-//         } else {
-//             cb(new Error('Formato de arquivo inválido'));
-//         }
-//     }
-//  });
+const multer = require('multer');
+const path = require('path');
+const upload = multer({ dest: 'uploads/',
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === 'audio/wav' || file.mimetype === 'audio/mpeg') {
+            cb(null, true);
+        } else {
+            cb(new Error('Formato de arquivo inválido'));
+        }
+    }
+ });
 
 // * Get Routes
 app.get("/", (req, res) => {
     res.render("index.ejs");
 });
-
-
 
 // * Post Routes
 app.post("/upload", (req, res) =>{
@@ -54,7 +54,5 @@ app.listen(port, () =>{
 //        res.json({ message: 'Arquivo enviado com sucesso' });
 //    });
    
-// app.listen(3000, () => {
-//     console.log('Servidor ouvindo na porta 3000');
-// });
+
 
