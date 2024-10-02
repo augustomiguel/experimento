@@ -19,7 +19,7 @@ body {
 
 .header{
     display: flex;
-    padding: 0.5rem 8rem;
+    padding: 1rem 8rem;
     align-items: center;
     justify-content: space-between;
     background-color: #633079;
@@ -27,8 +27,8 @@ body {
 }
 
 .header__img-box {
-    width: 6rem;
-    height: 6rem;
+    width: 4rem;
+    height: 4rem;
     background-color: #f1c40f;
     padding: 0.3rem;
     border-radius: 50%;

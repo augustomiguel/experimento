@@ -25,6 +25,14 @@
     width: 100%;
 }
 
+.phrase {
+    color: #f1c40f;
+    font-size: 3.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    font-weight: 700;
+}
+
 
 button {
     padding: 1rem 2rem;

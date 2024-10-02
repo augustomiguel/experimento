@@ -4,8 +4,7 @@ const multer = require('multer');
 const path = require('path');
 
 const app = express();
-const   
- port = 3000;
+const port = 3000;
 
 // Middleware for parsing JSON and URL-encoded bodies
 app.use(bodyParser.json());
