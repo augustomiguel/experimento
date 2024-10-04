@@ -1,3 +1,5 @@
+// TODO importar frases do frases.js
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -5,6 +7,9 @@ const path = require('path');
 
 const app = express();
 const port = 3000;
+
+// TODO Interação com BD 
+
 
 // Middleware for parsing JSON and URL-encoded bodies
 app.use(bodyParser.json());
@@ -27,9 +32,18 @@ const upload = multer({
 });
 
 // Get route for the main page
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { 
   res.render('index.ejs'); // Assuming you have an 'index.ejs' template
 });
+
+// TODO 1) criar rota para recebimento de dados do usuário 
+// TODO 2) Lidar com autentificação do usuário 
+
+
+// TODO criar rota e lógica para teste
+
+// TODO criar rota e lógica para experimento
+
 
 // Post route for handling audio uploads
 app.post('/upload', upload.single('audio'), async (req, res) => {

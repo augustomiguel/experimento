@@ -1,3 +1,11 @@
+const frases = [
+    "frase1", 
+    "frase2",
+];
+
+
+
+
 // create form
 var form = {
     type: "survey-html-form",
