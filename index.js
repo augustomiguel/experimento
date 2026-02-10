@@ -1,63 +1,68 @@
-import express from "express";
-import bodyParser from "body-parser";
+// TODO importar frases do frases.js
 
-//// receber audio 
-import multer from 'multer';
-import path from "path";
-
+const express = require('express');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 const port = 3000;
 
+// TODO Interação com BD 
+
+
+// Middleware for parsing JSON and URL-encoded bodies
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: false }));
 
-const upload = multer({ dest: 'uploads/',
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype === 'audio/wav' || file.mimetype === 'audio/mpeg') {
-            cb(null, true);
-        } else {
-            cb(new Error('Formato de arquivo inválido'));
-        }
+// Serve static files from the 'public' directory
+app.use(express.static('public')); 
+
+
+// Configure Multer for file uploads
+const upload = multer({
+  dest: 'uploads/',
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'audio/wav' || file.mimetype === 'audio/mpeg') {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file format. Only WAV and MPEG audio files are allowed.'));
     }
- });
-
-// * Get Routes
-app.get("/", (req, res) => {
-    res.render("index.ejs");
+  }
 });
 
-// * Post Routes
-// app.post("/upload", (req, res) =>{
-//     console.log(req.body);
-//     res.redirect("/");
-// });
+// Get route for the main page
+app.get('/', (req, res) => { 
+  res.render('index.ejs'); // Assuming you have an 'index.ejs' template
+});
+
+// TODO 1) criar rota para recebimento de dados do usuário 
+// TODO 2) Lidar com autentificação do usuário 
 
 
-app.listen(port, () =>{
-    console.log(`Executando na porta ${port}`);
- });
+// TODO criar rota e lógica para teste
+
+// TODO criar rota e lógica para experimento
 
 
-app.post('/upload',   
-    upload.single('audio'), async (req, res) => {
-        
-        try{
-            const originalname = req.file.originalname;
-            //const file = req.file;
-            const filename = req.file.filename;
-            const filepath = path.join(__dirname, 'uploads', filename);
+// Post route for handling audio uploads
+app.post('/upload', upload.single('audio'), async (req, res) => {
+  try {
+    const originalname = req.file.originalname;
+    const filename = req.file.filename;
+    const filepath = path.join(__dirname, 'uploads', filename);
 
-            // Aqui você pode salvar o arquivo em um banco de dados, processá-lo, etc.
-            console.log(`Arquivo ${originalname} salvo como ${filepath}`);
+    // Process the uploaded audio file (e.g., save to database, analyze content)
+    console.log(`File '${originalname}' saved as '${filepath}'`);
 
-            res.json({ message: 'Arquivo enviado com sucesso' });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Erro ao processar o arquivo' });
-          }
-   });
-   
+    res.json({ message: 'File uploaded successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error processing the file' });
+  }
+});
 
-
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
